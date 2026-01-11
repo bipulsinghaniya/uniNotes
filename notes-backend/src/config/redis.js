@@ -9,15 +9,47 @@
 // });
 
 // module.exports = redisClient;
+
+
+
+// const redis = require("redis");
+
+// const redisClient = redis.createClient({
+//   socket: {
+//     host: process.env.REDIS_HOST,
+//     port: Number(process.env.REDIS_PORT),
+//     tls: true, // 🔥 REQUIRED for Redis Cloud
+//   },
+//   password: process.env.REDIS_PASS,
+// });
+
+// redisClient.on("error", (err) => {
+//   console.error("❌ Redis Error:", err.message);
+// });
+
+// module.exports = redisClient;
+
+
+
+
+
+
+
 const redis = require("redis");
+
+const isProduction = process.env.NODE_ENV === "production";
 
 const redisClient = redis.createClient({
   socket: {
     host: process.env.REDIS_HOST,
     port: Number(process.env.REDIS_PORT),
-    tls: true, // 🔥 REQUIRED for Redis Cloud
+    ...(isProduction && { tls: true }), // ✅ TLS only on Render
   },
   password: process.env.REDIS_PASS,
+});
+
+redisClient.on("connect", () => {
+  console.log("✅ Redis connected");
 });
 
 redisClient.on("error", (err) => {
@@ -25,8 +57,6 @@ redisClient.on("error", (err) => {
 });
 
 module.exports = redisClient;
-
-
 
 
 
