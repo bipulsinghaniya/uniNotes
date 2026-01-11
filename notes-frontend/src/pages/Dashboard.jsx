@@ -1125,6 +1125,10 @@
 //   );
 // }
 
+
+
+
+
 import { useEffect, useState, useContext } from "react";
 import api from "../api/axios";
 import NoteCard from "../components/NoteCard";
@@ -1270,43 +1274,116 @@ function Section({ children }) {
   );
 }
 
+
+
+
+// function CourseCard({ title, color, onSelect }) {
+//   const mainColor = color === "blue" ? "blue" : "green";
+
+//   return (
+//     <div className="bg-white rounded-2xl shadow-lg p-8">
+//       <div className={`inline-flex items-center gap-3 bg-${mainColor}-600 text-white px-8 py-3 rounded-xl font-bold mb-8 select-none`}>
+//         {title}
+//       </div>
+
+//       <div className="grid grid-cols-2 gap-4">
+//         {[1, 2, 3, 4].map(y => (
+//           <button
+//             key={y}
+//             onClick={() => onSelect(y)}
+//             className={`
+//               bg-white
+//               text-gray-900
+
+//               border-2 border-${mainColor}-300
+//               hover:border-${mainColor}-600
+
+//               hover:bg-${mainColor}-600
+//               hover:text-white
+
+//               px-6 py-4 rounded-xl font-semibold
+//               transition-all duration-200
+//               hover:scale-105
+//               focus:outline-none
+//             `}
+//           >
+//             {y} Year
+//           </button>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
 function CourseCard({ title, color, onSelect }) {
-  const mainColor = color === "blue" ? "blue" : "green";
+  const styles = {
+    blue: {
+      badge: "bg-blue-600",
+      border: "border-blue-300 hover:border-blue-600",
+      hover: "hover:bg-blue-600 hover:text-white",
+    },
+    green: {
+      badge: "bg-green-600",
+      border: "border-green-300 hover:border-green-600",
+      hover: "hover:bg-green-600 hover:text-white",
+    },
+  };
+
+  const c = styles[color];
 
   return (
     <div className="bg-white rounded-2xl shadow-lg p-8">
-      <div className={`inline-flex items-center gap-3 bg-${mainColor}-600 text-white px-8 py-3 rounded-xl font-bold mb-8 select-none`}>
+      <div
+        className={`inline-flex items-center gap-3 ${c.badge} text-white px-8 py-3 rounded-xl font-bold mb-8 select-none`}
+      >
         {title}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        {[1, 2, 3, 4].map(y => (
+        {[1, 2, 3, 4].map((y) => (
+          // <button
+          //   key={y}
+          //   onClick={() => onSelect(y)}
+          //   className={`
+          //     bg-white text-gray-900
+          //     border-2 ${c.border}
+          //     ${c.hover}
+          //     px-6 py-4 rounded-xl font-semibold
+          //     transition-all duration-200
+          //     hover:scale-105
+          //     focus:outline-none
+          //   `}
+          // >
+          //   {y} Year
+          // </button>
+
           <button
-            key={y}
-            onClick={() => onSelect(y)}
-            className={`
-              bg-white
-              text-gray-900
+  key={y}
+  onClick={() => onSelect(y)}
+  className={`
+    bg-white text-gray-900
+    border-2 ${c.border}
+    ${c.hover}
 
-              border-2 border-${mainColor}-300
-              hover:border-${mainColor}-600
+    cursor-pointer   // ✅ ADD THIS
 
-              hover:bg-${mainColor}-600
-              hover:text-white
+    px-6 py-4 rounded-xl font-semibold
+    transition-all duration-200
+    hover:scale-105
+    focus:outline-none
+  `}
+>
+  {y} Year
+</button>
 
-              px-6 py-4 rounded-xl font-semibold
-              transition-all duration-200
-              hover:scale-105
-              focus:outline-none
-            `}
-          >
-            {y} Year
-          </button>
         ))}
       </div>
     </div>
   );
 }
+
+
+
+
 
 function BoxGrid({ title, items, onSelect }) {
   return (
@@ -1314,27 +1391,28 @@ function BoxGrid({ title, items, onSelect }) {
       <h2 className="text-2xl font-bold mb-6 text-gray-800">{title}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {items.map(item => (
-          <button
-            key={item}
-            onClick={() => onSelect(item)}
-            className="
-              bg-white
-              text-gray-900
+       <button
+  key={item}
+  onClick={() => onSelect(item)}
+  className="
+    bg-white
+    text-gray-900
+    border-2 border-blue-300
+    hover:border-blue-600
+    hover:bg-blue-600
+    hover:text-white
 
-              border-2 border-blue-300
-              hover:border-blue-600
+    cursor-pointer   // ✅ ADD THIS
 
-              hover:bg-blue-600
-              hover:text-white
+    px-6 py-4 rounded-xl font-semibold
+    transition-all duration-200
+    hover:scale-105
+    focus:outline-none
+  "
+>
+  {item}
+</button>
 
-              px-6 py-4 rounded-xl font-semibold
-              transition-all duration-200
-              hover:scale-105
-              focus:outline-none
-            "
-          >
-            {item}
-          </button>
         ))}
       </div>
     </>

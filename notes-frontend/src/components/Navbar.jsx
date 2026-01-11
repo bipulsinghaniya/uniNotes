@@ -7,7 +7,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-blue-600 text-white px-6 py-3 flex justify-between items-center">
-      <h1 className="font-bold text-lg">Notes Platform</h1>
+      <h1 className="font-bold text-lg">UniNotes</h1>
 
       <div className="flex items-center gap-4">
         <Link to="/dashboard">Dashboard</Link>
