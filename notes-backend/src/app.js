@@ -2,13 +2,20 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const app = express();
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: "https://uni-notes-eta.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true
-}));
+app.options("*", cors());
+
 
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/notes", require("./routes/notesRoutes"));
