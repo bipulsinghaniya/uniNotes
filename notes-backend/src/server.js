@@ -3,7 +3,6 @@ const app = require("./app");
 const connectDB = require("./config/db");
 const redisClient = require("./config/redis");
 const cors = require("cors");
-const cors = require("cors");
 
 app.use(cors({
   origin: "https://uni-notes-eta.vercel.app",
