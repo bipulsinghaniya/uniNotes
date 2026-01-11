@@ -25,11 +25,15 @@
 // module.exports = app;
 
 // src/app.js
+
+
+
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 const app = express();
+
 app.set("trust proxy", 1);
 
 app.use(express.json());
@@ -38,13 +42,15 @@ app.use(cookieParser());
 const corsOptions = {
   origin: "https://uni-notes-eta.vercel.app",
   credentials: true,
-  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
-  allowedHeaders: ["Content-Type","Authorization"]
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-// MUST be before routes
+// ✅ APPLY CORS ONCE — CORRECTLY
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // handle preflight
+
+// ✅ EXPLICITLY HANDLE PREFLIGHT
+app.options("*", cors(corsOptions));
 
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/notes", require("./routes/notesRoutes"));
