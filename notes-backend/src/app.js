@@ -47,7 +47,13 @@ app.use(
 );
 
 // 🔴 THIS LINE IS MANDATORY (preflight fix)
-app.options("*", cors());
+app.options("*", cors({
+  origin: [
+    "http://localhost:5173",
+    "https://uninotes-frontend.onrender.com",
+  ],
+  credentials: true,
+}));
 
 /* ======================
    API ROUTES
