@@ -14,13 +14,15 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // ✅ preflight fixed
+
+// 🔥 IMPORTANT: explicitly handle preflight for API routes
+app.options("/auth/*", cors(corsOptions));
+app.options("/notes/*", cors(corsOptions));
 
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/notes", require("./routes/notesRoutes"));
 
 module.exports = app;
-
 
 
 
