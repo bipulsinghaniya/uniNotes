@@ -47,12 +47,11 @@ const login = async (req, res) => {
 //   sameSite: "lax"
 // });
 
-   res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,        // ✅ REQUIRED
-      sameSite: "none",    // ✅ REQUIRED
-      maxAge: 60 * 60 * 1000,
-    });
+ res.cookie("token", token, {
+  httpOnly: true,
+  sameSite: "lax",
+  maxAge: 60 * 60 * 1000,
+});
 
 
 
@@ -87,11 +86,11 @@ const logout = async (req, res) => {
   await redisClient.expireAt(`token:${token}`, payload.exp);
 
   // res.clearCookie("token");
-  res.clearCookie("token", {
+ res.clearCookie("token", {
   httpOnly: true,
-  secure: true,
-  sameSite: "none"
+  sameSite: "lax",
 });
+
 
   res.send("Logged Out");
 };
