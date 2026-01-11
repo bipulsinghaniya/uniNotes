@@ -20,8 +20,6 @@
 // module.exports = app;
 
 
-
-
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -33,18 +31,27 @@ app.set("trust proxy", 1);
 app.use(express.json());
 app.use(cookieParser());
 
+/* ======================
+   CORS CONFIG (IMPORTANT)
+====================== */
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://uninotes.onrender.com" // frontend deploy ke baad confirm karenge
+      "https://uninotes-frontend.onrender.com",
     ],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
+// 🔴 THIS LINE IS MANDATORY (preflight fix)
+app.options("*", cors());
 
-/* API routes */
+/* ======================
+   API ROUTES
+====================== */
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/notes", require("./routes/notesRoutes"));
 
