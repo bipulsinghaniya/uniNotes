@@ -47,15 +47,12 @@ const login = async (req, res) => {
 //   sameSite: "lax"
 // });
 
-
-res.cookie("token", token, {
-  httpOnly: true,
-  secure: true,        // REQUIRED on HTTPS (Render + Vercel)
-  sameSite: "none",    // REQUIRED for cross-site
-  maxAge: 60 * 60 * 1000 // 1 hour
-});
-
-
+   res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,        // ✅ REQUIRED
+      sameSite: "none",    // ✅ REQUIRED
+      maxAge: 60 * 60 * 1000,
+    });
 
 
 
@@ -82,44 +79,23 @@ res.cookie("token", token, {
 
 
 
-// const logout = async (req, res) => {
-//   const { token } = req.cookies;
-//   const payload = jwt.decode(token);
-
-//   await redisClient.set(`token:${token}`, "blocked");
-//   await redisClient.expireAt(`token:${token}`, payload.exp);
-
-//   // res.clearCookie("token");
-//   res.clearCookie("token", {
-//   httpOnly: true,
-//   secure: true,
-//   sameSite: "none"
-// });
-
-//   res.send("Logged Out");
-// };
-
-
-
 const logout = async (req, res) => {
   const { token } = req.cookies;
+  const payload = jwt.decode(token);
 
-  if (token) {
-    const payload = jwt.decode(token);
-    if (payload?.exp) {
-      await redisClient.set(`token:${token}`, "blocked");
-      await redisClient.expireAt(`token:${token}`, payload.exp);
-    }
-  }
+  await redisClient.set(`token:${token}`, "blocked");
+  await redisClient.expireAt(`token:${token}`, payload.exp);
 
+  // res.clearCookie("token");
   res.clearCookie("token", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none"
-  });
+  httpOnly: true,
+  secure: true,
+  sameSite: "none"
+});
 
   res.send("Logged Out");
 };
+
 
 
 module.exports = { register, login, logout };
