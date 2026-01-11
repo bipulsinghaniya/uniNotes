@@ -37,11 +37,12 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://uninotes.onrender.com",
+      "https://uninotes.onrender.com" // frontend deploy ke baad confirm karenge
     ],
     credentials: true,
   })
 );
+
 
 /* API routes */
 app.use("/auth", require("./routes/authRoutes"));
