@@ -24,26 +24,26 @@
 
 
 
+
+
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 const app = express();
-
 app.set("trust proxy", 1);
-
-const corsOptions = {
-  origin: "https://uni-notes-eta.vercel.app",
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-};
-
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // ✅ THIS FIXES PREFLIGHT
 
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(
+  cors({
+    origin: "https://uni-notes-eta.vercel.app",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  })
+);
 
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/notes", require("./routes/notesRoutes"));
