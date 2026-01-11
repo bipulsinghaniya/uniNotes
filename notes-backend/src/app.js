@@ -50,7 +50,6 @@
 
 // module.exports = app;
 
-
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -62,17 +61,17 @@ app.set("trust proxy", 1);
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(
-  cors({
-    origin: "https://uni-notes-eta.vercel.app",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-  })
-);
+const corsOptions = {
+  origin: "https://uni-notes-eta.vercel.app",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+};
 
-// ✅ REQUIRED FOR PREFLIGHT
-app.options("*", cors());
+app.use(cors(corsOptions));
+
+// 🔴 THIS WAS THE REAL BUG
+app.options("*", cors(corsOptions));
 
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/notes", require("./routes/notesRoutes"));
