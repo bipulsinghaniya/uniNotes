@@ -1,38 +1,52 @@
+// const express = require("express");
+// const cookieParser = require("cookie-parser");
+// const cors = require("cors");
+
+// const app = express();
+
+// app.use(express.json());
+// app.use(cookieParser());
+
+// /* ✅ Simple CORS (allow frontend dev server) */
+// app.use(cors({
+//   origin: true,        // allow any origin (DEV ONLY)
+//   credentials: true,
+// }));
+
+// /* API routes only */
+// app.use("/auth", require("./routes/authRoutes"));
+// app.use("/notes", require("./routes/notesRoutes"));
+
+// module.exports = app;
+
+
+
+
 const express = require("express");
 const cookieParser = require("cookie-parser");
-const path = require("path");
+const cors = require("cors");
 
 const app = express();
 
 app.set("trust proxy", 1);
+
 app.use(express.json());
 app.use(cookieParser());
 
-/* ================================
-   🔥 SERVE FRONTEND (IMPORTANT)
-   ================================ */
 app.use(
-  express.static(
-    path.join(__dirname, "../../notes-frontend/dist")
-  )
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://uninotes.onrender.com",
+    ],
+    credentials: true,
+  })
 );
 
-/* ================================
-   API ROUTES
-   ================================ */
+/* API routes */
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/notes", require("./routes/notesRoutes"));
 
-/* ================================
-   🔥 REACT FALLBACK
-   ================================ */
-app.get("*", (req, res) => {
-  res.sendFile(
-    path.join(
-      __dirname,
-      "../../notes-frontend/dist/index.html"
-    )
-  );
-});
-
 module.exports = app;
+
+
