@@ -27,33 +27,36 @@
 // src/app.js
 
 
-
 const express = require("express");
 const cookieParser = require("cookie-parser");
-const cors = require("cors");
 
 const app = express();
 
 app.set("trust proxy", 1);
-
 app.use(express.json());
 app.use(cookieParser());
 
-const corsOptions = {
-  origin: "https://uni-notes-eta.vercel.app",
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
+// 🔥 HARD FIX FOR PREFLIGHT
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://uni-notes-eta.vercel.app");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
 
-// ✅ APPLY CORS ONCE — CORRECTLY
-app.use(cors(corsOptions));
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
 
-// ✅ EXPLICITLY HANDLE PREFLIGHT
-app.options("*", cors(corsOptions));
+  next();
+});
 
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/notes", require("./routes/notesRoutes"));
 
 module.exports = app;
-
