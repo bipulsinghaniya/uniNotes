@@ -1,11 +1,27 @@
-const { createClient } = require("redis");
+// const { createClient } = require("redis");
 
-const redisClient = createClient({
-  password: process.env.REDIS_PASS,
+// const redisClient = createClient({
+//   password: process.env.REDIS_PASS,
+//   socket: {
+//     host: process.env.REDIS_HOST,
+//     port: process.env.REDIS_PORT
+//   }
+// });
+
+// module.exports = redisClient;
+const redis = require("redis");
+
+const redisClient = redis.createClient({
   socket: {
     host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT
-  }
+    port: Number(process.env.REDIS_PORT),
+    tls: true, // 🔥 REQUIRED for Redis Cloud
+  },
+  password: process.env.REDIS_PASS,
+});
+
+redisClient.on("error", (err) => {
+  console.error("❌ Redis Error:", err.message);
 });
 
 module.exports = redisClient;
