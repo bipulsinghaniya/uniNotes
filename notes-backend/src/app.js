@@ -31,6 +31,11 @@ app.set("trust proxy", 1);
 app.use(express.json());
 app.use(cookieParser());
 
+app.get("/test", (req, res) => {
+  res.send("API WORKING");
+});
+
+
 /* ======================
    CORS CONFIG (IMPORTANT)
 ====================== */
