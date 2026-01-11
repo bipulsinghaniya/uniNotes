@@ -34,16 +34,13 @@
 
 
 
-
 const redis = require("redis");
-
-const isProduction = process.env.NODE_ENV === "production";
 
 const redisClient = redis.createClient({
   socket: {
     host: process.env.REDIS_HOST,
     port: Number(process.env.REDIS_PORT),
-    ...(isProduction && { tls: true }), // ✅ TLS only on Render
+    tls: {}, // ✅ REQUIRED for Redis Cloud
   },
   password: process.env.REDIS_PASS,
 });
@@ -53,12 +50,10 @@ redisClient.on("connect", () => {
 });
 
 redisClient.on("error", (err) => {
-  console.error("❌ Redis Error:", err.message);
+  console.error("❌ Redis Error:", err);
 });
 
 module.exports = redisClient;
-
-
 
 
 //    host: 'redis-17770.c83.us-east-1-2.ec2.cloud.redislabs.com',
