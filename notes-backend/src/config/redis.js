@@ -34,19 +34,43 @@
 
 
 
+// const redis = require("redis");
+
+// const redisClient = redis.createClient({
+//   socket: {
+//     host: process.env.REDIS_HOST,
+//     port: Number(process.env.REDIS_PORT),
+//     tls: {}, // ✅ REQUIRED for Redis Cloud
+//   },
+//   password: process.env.REDIS_PASS,
+// });
+
+// redisClient.on("connect", () => {
+//   console.log("✅ Redis connected");
+// });
+
+// redisClient.on("error", (err) => {
+//   console.error("❌ Redis Error:", err);
+// });
+
+// module.exports = redisClient;
+
 const redis = require("redis");
 
 const redisClient = redis.createClient({
   socket: {
     host: process.env.REDIS_HOST,
     port: Number(process.env.REDIS_PORT),
-    tls: {}, // ✅ REQUIRED for Redis Cloud
   },
   password: process.env.REDIS_PASS,
 });
 
 redisClient.on("connect", () => {
   console.log("✅ Redis connected");
+});
+
+redisClient.on("ready", () => {
+  console.log("🚀 Redis ready");
 });
 
 redisClient.on("error", (err) => {
