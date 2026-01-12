@@ -53,7 +53,7 @@ app.use(
   })
 );
 
-app.options("*", cors());
+app.options(/.*/, cors());
 
 
 // Other middleware
@@ -76,7 +76,7 @@ app.use("/notes", require("./routes/notesRoutes"));
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).json({ error: "Route not found" });
+  res.status(404).json({ error: "Route not foundddddd" });
 });
 
 module.exports = app;
