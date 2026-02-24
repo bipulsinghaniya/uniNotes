@@ -18,7 +18,7 @@ export default function Navbar() {
           </Link>
         )}
 
-        <button onClick={logout}  className="bg-red-500 px-3 py-1 rounded" >
+        <button onClick={logout}  className="bg-red-500 px-3 py-1 rounded cursor-pointer" >
           Logout
         </button>
       </div>
