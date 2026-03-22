@@ -13,8 +13,7 @@ export default function App() {
   const location = useLocation();
 
   const hideNavbar =
-    location.pathname === "/login" ||
-    location.pathname === "/register";
+    location.pathname === "/login" ||location.pathname === "/register";
 
   return (
     <>
@@ -24,33 +23,12 @@ export default function App() {
         {/* Public */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
         {/* User + Admin */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-
+        <Route path="/dashboard" element={ <ProtectedRoute> <Dashboard /> </ProtectedRoute> } />
         {/* Admin only */}
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute admin>
-              <AdminPanel />
-            </ProtectedRoute>
-          }
-        />
-
+        <Route  path="/admin" element={ <ProtectedRoute admin>   <AdminPanel /> </ProtectedRoute>}/>
         {/* Default */}
-        <Route
-          path="*"
-          element={<Navigate to={user ? "/dashboard" : "/login"} />}
-        />
-      </Routes>
+        <Route  path="*"  element={<Navigate to={user ? "/dashboard" : "/login"} />}/></Routes>
     </>
   );
 }
