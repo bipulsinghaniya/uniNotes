@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const api = axios.create({
-  // baseURL: "http://localhost:5000",
+  baseURL: "http://localhost:5000",
 //  baseURL: "https://uninotes-backend-tbfr.onrender.com",
-baseURL: "https://uninotes-backend-fbfr.onrender.com",
+// baseURL: "https://uninotes-backend-fbfr.onrender.com",
 
   withCredentials: true,
 });

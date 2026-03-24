@@ -8,6 +8,9 @@ import Navbar from "./components/Navbar";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 
+import CheckEmail from "./pages/CheckEmail";
+import VerifyEmail from "./pages/VerifyEmail";
+
 export default function App() {
   const { user } = useContext(AuthContext);
   const location = useLocation();
@@ -27,6 +30,10 @@ export default function App() {
         <Route path="/dashboard" element={ <ProtectedRoute> <Dashboard /> </ProtectedRoute> } />
         {/* Admin only */}
         <Route  path="/admin" element={ <ProtectedRoute admin>   <AdminPanel /> </ProtectedRoute>}/>
+
+     <Route path="/check-email" element={<CheckEmail />} />
+     <Route path="/verify-email" element={<VerifyEmail />} />
+
         {/* Default */}
         <Route  path="*"  element={<Navigate to={user ? "/dashboard" : "/login"} />}/></Routes>
     </>

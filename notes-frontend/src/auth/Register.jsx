@@ -4,6 +4,7 @@ import { useState } from "react";
 import api from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 
+
 export default function Register() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -12,25 +13,62 @@ export default function Register() {
     password: ""
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // const handleRegister = async () => {
+  //   setError("");
+  //   if (!form.name || !form.email || !form.password) {
+  //     setError("All fields are required");
+  //     return;
+  //   }
+  //   try {
+  //     await api.post("/auth/register", form);
+  //     alert("Registered successfully");
+  //     navigate("/login");
+  //   } catch (err) {
+  //     setError(err.response?.data || "Registration failed");
+  //   }
+  // };
+
+
+  // otp
+
+
   const handleRegister = async () => {
-    setError("");
-    if (!form.name || !form.email || !form.password) {
-      setError("All fields are required");
-      return;
-    }
-    try {
-      await api.post("/auth/register", form);
-      alert("Registered successfully");
-      navigate("/login");
-    } catch (err) {
-      setError(err.response?.data || "Registration failed");
-    }
-  };
+  setError("");
+
+  if (!form.name || !form.email || !form.password) {
+    setError("All fields are required");
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    const res = await api.post("/auth/register", form);
+    console.log(res);
+
+    // show message (OTP sent)
+    // alert("i am shoin this alrer in resgiter.jsx");
+    alert(res.data.message);
+
+    // 👉 go to OTP verification page
+    navigate("/verify-email", {
+      state: { email: form.email }
+    });
+
+  } catch (err) {
+    setError(err.response?.data?.message || "Registration failed");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 px-4 py-8 relative overflow-hidden">
