@@ -119,7 +119,7 @@ npm start
 Create a `.env` file inside backend:
 
 ```
-PORT=5000
+PORT=3000
 MONGO_URI=your_mongodb_connection
 JWT_SECRET=your_secret_key
 REDIS_URL=your_redis_connection
