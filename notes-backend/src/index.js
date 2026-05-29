@@ -15,7 +15,8 @@ app.set("trust proxy", 1);
 // CORS config matching AlgoJudge_2 but supporting both 5174 and 5173
 app.use(
   cors({
-    origin: ["http://localhost:5174", "http://localhost:5173"],
+    // origin: ["http://localhost:5174", "http://localhost:5173"],
+    origin: "https://uninotes-frontend.onrender.com",
     credentials: true,
   })
 );
