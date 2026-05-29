@@ -66,13 +66,18 @@
 
 
 
-import { useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import { logoutUser } from "../authSlice";
 
 export default function Navbar() {
-  const { user, logout } = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
   const location = useLocation();
+
+  const logout = () => {
+    dispatch(logoutUser());
+  };
 
   const isActive = (path) => location.pathname === path;
 
@@ -194,25 +199,131 @@ export default function Navbar() {
           margin: 0 6px;
         }
 
-        /* Logout button */
-        .navbar-logout {
-          padding: 8px 18px;
-          border-radius: 12px;
-          font-size: 0.9rem;
-          font-weight: 700;
-          border: none;
-          background: transparent;
-          color: #ef4444;
-          cursor: pointer;
-          transition: background 0.18s, color 0.18s, box-shadow 0.18s;
-          letter-spacing: 0.01em;
-          font-family: 'Nunito', sans-serif;
+        .navbar-profile-dropdown-container {
+          position: relative;
+          display: inline-block;
+          margin-left: 6px;
         }
 
-        .navbar-logout:hover {
-          background: rgba(239,68,68,0.08);
-          color: #dc2626;
-          box-shadow: inset 0 0 0 1.5px rgba(239,68,68,0.18);
+        .navbar-profile-btn {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          background: rgba(99, 102, 241, 0.08);
+          border: 1.5px solid rgba(99, 102, 241, 0.15);
+          padding: 6px 14px;
+          border-radius: 14px;
+          font-family: 'Nunito', sans-serif;
+          font-weight: 700;
+          font-size: 0.9rem;
+          color: #334155;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .navbar-profile-btn:hover {
+          background: rgba(99, 102, 241, 0.15);
+          border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .navbar-avatar {
+          width: 28px;
+          height: 28px;
+          background: linear-gradient(135deg, #4f8ef7 0%, #6c63ff 100%);
+          color: white;
+          font-weight: 800;
+          text-transform: uppercase;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.85rem;
+          box-shadow: 0 2px 8px rgba(108, 99, 255, 0.3);
+        }
+
+        .navbar-username {
+          max-width: 120px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .navbar-dropdown-arrow {
+          color: #64748b;
+          transition: transform 0.2s ease;
+        }
+
+        .navbar-profile-dropdown-container:hover .navbar-dropdown-arrow {
+          transform: rotate(180deg);
+        }
+
+        .navbar-dropdown-content {
+          display: none;
+          position: absolute;
+          right: 0;
+          top: 100%;
+          margin-top: 10px;
+          background: #ffffff;
+          border: 1.5px solid rgba(99, 102, 241, 0.1);
+          min-width: 170px;
+          box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.15), 0 8px 10px -6px rgba(99, 102, 241, 0.15);
+          border-radius: 14px;
+          z-index: 100;
+          padding: 6px;
+          animation: navDropdownFade 0.2s ease;
+        }
+
+        .navbar-dropdown-content::before {
+          content: '';
+          position: absolute;
+          top: -14px;
+          left: 0;
+          right: 0;
+          height: 14px;
+          background: transparent;
+        }
+
+        @keyframes navDropdownFade {
+          from {
+            opacity: 0;
+            transform: translateY(6px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .navbar-profile-dropdown-container:hover .navbar-dropdown-content {
+          display: block;
+        }
+
+        .navbar-dropdown-item {
+          display: block;
+          width: 100%;
+          text-align: left;
+          padding: 10px 14px;
+          font-size: 0.9rem;
+          font-weight: 700;
+          color: #475569;
+          text-decoration: none;
+          border-radius: 10px;
+          border: none;
+          background: transparent;
+          cursor: pointer;
+          transition: all 0.15s ease;
+          font-family: 'Nunito', sans-serif;
+          box-sizing: border-box;
+        }
+
+        .navbar-dropdown-item:hover {
+          background: rgba(99, 102, 241, 0.08);
+          color: #6c63ff;
+        }
+        
+        .navbar-dropdown-item.text-red-500:hover {
+          background: rgba(239, 68, 68, 0.08);
+          color: #ef4444;
         }
       `}</style>
 
@@ -243,20 +354,32 @@ export default function Navbar() {
               Dashboard
             </Link>
 
-            {user?.role === "admin" && (
-              <Link
-                to="/admin"
-                className={`navbar-link ${isActive("/admin") ? "active-admin" : ""}`}
-              >
-                Admin Panel
-              </Link>
-            )}
-
             <div className="navbar-divider" />
 
-            <button className="navbar-logout" onClick={logout}>
-              Logout
-            </button>
+            {/* Profile Dropdown */}
+            <div className="navbar-profile-dropdown-container">
+              <button className="navbar-profile-btn">
+                <span className="navbar-avatar">
+                  {user?.name ? user.name[0].toLowerCase() : (user?.email ? user.email[0].toLowerCase() : 'u')}
+                </span>
+                <span className="navbar-username">
+                  {user?.name || user?.email?.split('@')[0]}
+                </span>
+                <svg className="navbar-dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </button>
+              <div className="navbar-dropdown-content">
+                {user?.role === "admin" && (
+                  <Link to="/admin" className="navbar-dropdown-item">
+                    Admin Panel
+                  </Link>
+                )}
+                <button onClick={logout} className="navbar-dropdown-item text-red-500 hover:bg-red-50">
+                  Logout
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </nav>

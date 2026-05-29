@@ -1,12 +1,14 @@
 
 
 import { useState } from "react";
-import api from "../api/axios";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../authSlice";
 import { useNavigate, Link } from "react-router-dom";
 
-
 export default function Register() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { loading: authLoading } = useSelector((state) => state.auth);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -19,54 +21,35 @@ export default function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // const handleRegister = async () => {
-  //   setError("");
-  //   if (!form.name || !form.email || !form.password) {
-  //     setError("All fields are required");
-  //     return;
-  //   }
-  //   try {
-  //     await api.post("/auth/register", form);
-  //     alert("Registered successfully");
-  //     navigate("/login");
-  //   } catch (err) {
-  //     setError(err.response?.data || "Registration failed");
-  //   }
-  // };
-
-
-  // otp
-
-
   const handleRegister = async () => {
-  setError("");
+    setError("");
 
-  if (!form.name || !form.email || !form.password) {
-    setError("All fields are required");
-    return;
-  }
+    if (!form.name || !form.email || !form.password) {
+      setError("All fields are required");
+      return;
+    }
 
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
+      const result = await dispatch(registerUser(form));
 
-    const res = await api.post("/auth/register", form);
-    console.log(res);
+      if (registerUser.fulfilled.match(result)) {
+        // show message (OTP sent)
+        alert(result.payload.message || "OTP sent to your email");
 
-    // show message (OTP sent)
-    // alert("i am shoin this alrer in resgiter.jsx");
-    alert(res.data.message);
-
-    // 👉 go to OTP verification page
-    navigate("/verify-email", {
-      state: { email: form.email }
-    });
-
-  } catch (err) {
-    setError(err.response?.data?.message || "Registration failed");
-  } finally {
-    setLoading(false);
-  }
-};
+        // 👉 go to OTP verification page
+        navigate("/verify-email", {
+          state: { email: form.email }
+        });
+      } else {
+        setError(result.payload || "Registration failed");
+      }
+    } catch (err) {
+      setError(err.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
 
@@ -113,7 +96,7 @@ export default function Register() {
                          
  <Link
   to="/login"
-  className="inline-block bg-white px-12 py-4 rounded-xl font-bold shadow-lg transition-all transform hover:-translate-y-1 hover:bg-blue-700 relative z-50"
+  className="inline-block bg-white px-12 py-4 rounded-xl font-bold shadow-lg transition-all transform hover:-translate-y-1 hover:bg-blue-700 relative z-50 cursor-pointer"
 >
   <span className="text-blue-700 opacity-100 hover:text-white">
     SIGN IN
@@ -183,7 +166,7 @@ export default function Register() {
 
               <button
                 onClick={handleRegister}
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 active:translate-y-0"
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 active:translate-y-0 cursor-pointer"
               >
                 REGISTER
               </button>
@@ -193,12 +176,10 @@ export default function Register() {
             <div className="mt-6 text-center md:hidden">
               <p className="text-gray-600 text-sm">
                 Already have an account?{" "}
-
-
                 
  <Link
   to="/login"
-  className="inline-block bg-white px-12 py-4 rounded-xl font-bold shadow-lg transition-all transform hover:-translate-y-1 hover:bg-blue-700 relative z-50"
+  className="inline-block bg-white px-12 py-4 rounded-xl font-bold shadow-lg transition-all transform hover:-translate-y-1 hover:bg-blue-700 relative z-50 cursor-pointer"
 >
   <span className="text-blue-700 opacity-100 hover:text-white">
     SIGN IN

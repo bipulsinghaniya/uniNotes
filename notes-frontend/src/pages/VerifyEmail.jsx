@@ -609,7 +609,7 @@ export default function VerifyEmail() {
 
   const handleVerify = async () => {
     try {
-      const res = await api.post("/auth/verify-otp", { email, otp });
+      const res = await api.post("/user/verify-otp", { email, otp });
       alert(res.data.message);
       navigate("/login");
     } catch (err) {

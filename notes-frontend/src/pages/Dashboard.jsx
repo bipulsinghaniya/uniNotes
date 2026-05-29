@@ -1,10 +1,10 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import api from "../api/axios";
 import NoteCard from "../components/NoteCard";
-import { AuthContext } from "../context/AuthContext";
 
 export default function Dashboard() {
-  const { user } = useContext(AuthContext);
+  const { user } = useSelector((state) => state.auth);
 
   const [notes, setNotes] = useState([]);
 

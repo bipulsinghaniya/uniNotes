@@ -1,11 +1,12 @@
-
-import { useContext, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../authSlice";
 import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
-  const { login } = useContext(AuthContext);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { loading, error: authError } = useSelector((state) => state.auth);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -15,11 +16,12 @@ export default function Login() {
       setError("Email and password are required");
       return;
     }
-    try {
-      await login(email, password);
+    setError("");
+    const result = await dispatch(loginUser({ email, password }));
+    if (loginUser.fulfilled.match(result)) {
       navigate("/dashboard");
-    } catch {
-      setError("Invalid email or password");
+    } else {
+      setError(result.payload || "Invalid email or password");
     }
   };
 
@@ -86,14 +88,14 @@ export default function Login() {
               </div>
 
               <div className="text-right">
-                <button className="text-sm text-blue-600 hover:text-blue-700 font-semibold transition">
+                <button className="text-sm text-blue-600 hover:text-blue-700 font-semibold transition cursor-pointer">
                   Forgot password?
                 </button>
               </div>
 
               <button
                 onClick={handleLogin}
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 active:translate-y-0"
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 active:translate-y-0 cursor-pointer"
               >
                 SIGN IN
               </button>
@@ -137,7 +139,7 @@ export default function Login() {
             
     <Link
   to="/register"
-  className="inline-block bg-white text-blue-600 px-12 py-4 rounded-xl font-bold shadow-lg hover:bg-blue-600 hover:text-white transition-all"
+  className="inline-block bg-white text-blue-600 px-12 py-4 rounded-xl font-bold shadow-lg hover:bg-blue-600 hover:text-white transition-all cursor-pointer"
 >
   SIGN UP
 </Link>

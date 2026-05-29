@@ -1,14 +1,17 @@
 
 
-import { useContext } from "react";
+import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
 
-export default function ProtectedRoute({ children }) {
-  const { user } = useContext(AuthContext);
+export default function ProtectedRoute({ children, admin }) {
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
 
-  if (!user) {
+  if (!isAuthenticated || !user) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (admin && user.role !== "admin") {
+    return <Navigate to="/dashboard" replace />;
   }
 
   return children;
