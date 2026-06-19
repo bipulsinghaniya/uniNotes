@@ -17,7 +17,7 @@ Frontend: https://uninotes-frontend.onrender.com
 * Responsive user interface
 * Token-based session management using Redis
 
-## 🖥️ Project Preview
+## 🖥️ Project Preview 
 
 After login, users land on a dashboard where they can access notes by selecting their department and academic year.
 
