@@ -3,7 +3,7 @@
 UniNotes is a full-stack Notes Portal that allows students to access and manage academic notes based on department and year.
 The platform provides secure authentication and an organized dashboard for browsing study materials.
 
-## 🚀 Live Demo
+## 🚀 Live Demo 
 
 Frontend: https://uninotes-frontend.onrender.com
 
